@@ -1,0 +1,73 @@
+CREATE TABLE Users (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    FullName NVARCHAR(255) NOT NULL,
+    Email NVARCHAR(255) UNIQUE NOT NULL,
+    PasswordHash NVARCHAR(MAX) NOT NULL,
+    Role NVARCHAR(50) CHECK (Role IN ('SuperAdmin', 'Doctor', 'Patient')) NOT NULL,
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+
+CREATE TABLE DoctorDetails (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    UserId UNIQUEIDENTIFIER UNIQUE NOT NULL,
+    Speciality NVARCHAR(255) NOT NULL,
+    CertificateUrl NVARCHAR(MAX) NOT NULL,
+    IsApproved BIT DEFAULT 0,
+    FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE PatientDetails (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    UserId UNIQUEIDENTIFIER UNIQUE NOT NULL,
+    DateOfBirth DATE NULL,
+    Gender NVARCHAR(50) CHECK (Gender IN ('Male', 'Female', 'Other')),
+    Address NVARCHAR(255) NULL,
+    Phone NVARCHAR(20) NULL,
+    FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE Appointments (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    DoctorId UNIQUEIDENTIFIER NOT NULL,
+    PatientId UNIQUEIDENTIFIER NOT NULL,
+    AppointmentDate DATE NOT NULL,
+    StartTime TIME NOT NULL,
+    FinishTime TIME NOT NULL,
+    Status NVARCHAR(50) CHECK (Status IN ('Pending', 'Approved', 'Rejected')) DEFAULT 'Pending',
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (DoctorId) REFERENCES Users(Id) ON DELETE NO ACTION,  -- Prevent cascade issues
+    FOREIGN KEY (PatientId) REFERENCES Users(Id) ON DELETE NO ACTION  -- Prevent cascade issues
+);
+
+
+
+
+CREATE TABLE Payments (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    AppointmentId UNIQUEIDENTIFIER UNIQUE NOT NULL,
+    Amount DECIMAL(10,2) NOT NULL,
+    PaymentStatus NVARCHAR(50) CHECK (PaymentStatus IN ('Pending', 'Completed', 'Failed')) DEFAULT 'Pending',
+    PaymentDate DATETIME NULL,
+    FOREIGN KEY (AppointmentId) REFERENCES Appointments(Id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE AuditLogs (
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    UserId UNIQUEIDENTIFIER NOT NULL,
+    Action NVARCHAR(255) NOT NULL,
+    ActionDate DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE
+);
+
+
+
+
+
+
+Insert into Users(FullName,Email,PasswordHash,Role)
+Values('Admin User','admin@gmail.com','$2a$11$jwotyUk0P4zJEUF7IwEuK.36sc7xVBuxqNsgeM.scbWZdBQxXl1NS','SuperAdmin')
