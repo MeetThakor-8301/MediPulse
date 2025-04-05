@@ -1,0 +1,121 @@
+@model IEnumerable<MediPulseWeb.Models.DTOs.UserResponse>
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Manage Users</h1>
+        <div>
+            <a href="@Url.Action("Doctors", "Admin")" class="btn btn-outline-primary me-2">
+                <i class="bi bi-person-badge"></i> View Doctors
+            </a>
+            <a href="@Url.Action("Patients", "Admin")" class="btn btn-outline-primary">
+                <i class="bi bi-people"></i> View Patients
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Registration Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>@user.FullName</td>
+                                <td>@user.Email</td>
+                                <td>
+                                    @if (user.Role == "SuperAdmin")
+                                    {
+                                        <span class="badge bg-danger">Admin</span>
+                                    }
+                                    else if (user.Role == "Doctor")
+                                    {
+                                        <span class="badge bg-primary">Doctor</span>
+                                    }
+                                    else if (user.Role == "Patient")
+                                    {
+                                        <span class="badge bg-success">Patient</span>
+                                    }
+                                </td>
+                                <td>@user.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                <td>
+                                    <a href="#" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#userDetailsModal-@user.Id">
+                                        <i class="bi bi-eye"></i> View
+                                    </a>
+
+                                   </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+  @foreach (var user in Model)
+                        {
+<!-- User Details Modal -->
+<div class="modal fade" id="userDetailsModal-@user.Id" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">User Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Name:</strong> @user.FullName</p>
+                        <p><strong>Email:</strong> @user.Email</p>
+                        <p>
+                            <strong>Role:</strong>
+                            @if (user.Role == "SuperAdmin")
+                            {
+                                <span class="badge bg-danger">Admin</span>
+                            }
+                            else if (user.Role == "Doctor")
+                            {
+                                <span class="badge bg-primary">Doctor</span>
+                            }
+                            else if (user.Role == "Patient")
+                            {
+                                <span class="badge bg-success">Patient</span>
+                            }
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>
+                            <strong>Status:</strong>
+                            @if (user.IsActive)
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Inactive</span>
+                            }
+                        </p>
+                        <p><strong>Registration Date:</strong> @user.CreatedAt.ToString("MMM dd, yyyy")</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+}

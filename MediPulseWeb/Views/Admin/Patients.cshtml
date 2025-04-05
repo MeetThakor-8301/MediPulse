@@ -1,0 +1,85 @@
+@model IEnumerable<MediPulseWeb.Models.DTOs.PatientResponse>
+@{
+    ViewData["Title"] = "Manage Patients";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Manage Patients</h1>
+        <a href="@Url.Action("Doctors", "Admin")" class="btn btn-outline-primary">
+            <i class="bi bi-person-badge"></i> View Doctors
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Date of Birth</th>
+                            <th>Gender</th>
+                            <th>Phone</th>
+                            <th>Registration Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var patient in Model)
+                        {
+                            <tr>
+                                <td>@patient.FullName</td>
+                                <td>@patient.Email</td>
+                                <td>@patient.DateOfBirth.ToString("MMM dd, yyyy")</td>
+                                <td>@patient.Gender</td>
+                                <td>@patient.Phone</td>
+                                <td>@patient.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                <td>
+                                    <a href="#" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#patientDetailsModal-@patient.Id">
+                                        <i class="bi bi-eye"></i> View
+                                    </a>
+
+                                 </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+ @foreach (var patient in Model)
+                        {
+<!-- Patient Details Modal -->
+<div class="modal fade" id="patientDetailsModal-@patient.Id" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Patient Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Name:</strong> @patient.FullName</p>
+                        <p><strong>Email:</strong> @patient.Email</p>
+                        <p><strong>Date of Birth:</strong> @patient.DateOfBirth.ToString("MMM dd, yyyy")</p>
+                        <p><strong>Gender:</strong> @patient.Gender</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Phone:</strong> @patient.Phone</p>
+                        <p><strong>Address:</strong> @patient.Address</p>
+                        <p><strong>Registration Date:</strong> @patient.CreatedAt.ToString("MMM dd, yyyy")</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+}

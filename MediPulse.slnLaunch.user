@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "MediPulse\\MediPulse.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "MediPulseWeb\\MediPulseWeb.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

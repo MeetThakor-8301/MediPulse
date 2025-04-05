@@ -1,0 +1,135 @@
+@model MediPulseWeb.Models.DTOs.UpdatePatientProfileRequest
+@{
+    ViewData["Title"] = "Update Profile";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Update Profile</h1>
+        <a href="@Url.Action("Profile", "Patient")" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left"></i> Back to Profile
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-action="UpdateProfile" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="mb-3">Basic Information</h5>
+                        <div class="mb-3">
+                            <label asp-for="FullName" class="form-label">Full Name</label>
+                            <input asp-for="FullName" class="form-control" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Phone" class="form-label">Phone Number</label>
+                            <input asp-for="Phone" class="form-control" />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label">Address</label>
+                            <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h5 class="mb-3">Personal Information</h5>
+                        <div class="mb-3">
+                            <label asp-for="DateOfBirth" class="form-label">Date of Birth</label>
+                            <input asp-for="DateOfBirth" class="form-control" type="date" />
+                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Gender" class="form-label">Gender</label>
+                            <select asp-for="Gender" class="form-select">
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h5 class="mb-3">Medical History</h5>
+                        <div id="medicalHistoryList">
+                            <!-- Medical history entries will be added here dynamically -->
+                        </div>
+                        <button type="button" class="btn btn-outline-primary mt-3" id="addMedicalCondition">
+                            <i class="bi bi-plus-lg"></i> Add Medical Condition
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let conditionCount = 0;
+
+            $('#addMedicalCondition').click(function () {
+                const conditionHtml = `
+                    <div class="card mb-3 medical-condition">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Condition Name</label>
+                                        <input type="text" name="MedicalHistory[${conditionCount}].ConditionName" class="form-control" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Diagnosed Date</label>
+                                        <input type="date" name="MedicalHistory[${conditionCount}].DiagnosedDate" class="form-control" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Status</label>
+                                        <select name="MedicalHistory[${conditionCount}].IsActive" class="form-select">
+                                            <option value="true">Active</option>
+                                            <option value="false">Resolved</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 d-flex align-items-end">
+                                    <button type="button" class="btn btn-danger btn-sm remove-condition">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                $('#medicalHistoryList').append(conditionHtml);
+                conditionCount++;
+            });
+
+            $(document).on('click', '.remove-condition', function () {
+                $(this).closest('.medical-condition').remove();
+            });
+        });
+    </script>
+} 

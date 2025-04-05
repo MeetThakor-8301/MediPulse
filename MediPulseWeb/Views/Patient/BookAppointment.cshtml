@@ -1,0 +1,172 @@
+@model MediPulseWeb.Models.DTOs.AppointmentRequest
+@{
+    ViewData["Title"] = "Book Appointment";
+    var doctorId = ViewBag.DoctorId;
+    var doctorName = ViewBag.DoctorName;
+    var doctorSpecialty = ViewBag.DoctorSpecialty;
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Book Appointment</h1>
+        <a href="@Url.Action("DoctorDetails", "Patient", new { doctorId = doctorId })" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left"></i> Back to Doctor Details
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Doctor Information</h5>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">@doctorName</h5>
+                    <p class="card-text"><strong>Specialty:</strong> @doctorSpecialty</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Appointment Details</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="BookAppointment" method="post" id="appointmentForm">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <input type="hidden" asp-for="DoctorId" value="@doctorId" />
+                        
+                        <div class="mb-3">
+                            <label asp-for="AppointmentDate" class="form-label">Appointment Date</label>
+                            <input asp-for="AppointmentDate" class="form-control" type="date" required 
+                                   min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            <span asp-validation-for="AppointmentDate" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="StartTime" class="form-label">Start Time</label>
+                                    <select asp-for="StartTime" class="form-select" required id="startTime">
+                                        <option value="">Select Start Time</option>
+                                        <option value="09:00:00">9:00 AM</option>
+                                        <option value="10:00:00">10:00 AM</option>
+                                        <option value="11:00:00">11:00 AM</option>
+                                        <option value="14:00:00">2:00 PM</option>
+                                        <option value="15:00:00">3:00 PM</option>
+                                        <option value="16:00:00">4:00 PM</option>
+                                    </select>
+                                    <span asp-validation-for="StartTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="FinishTime" class="form-label">Finish Time</label>
+                                    <select asp-for="FinishTime" class="form-select" required id="finishTime">
+                                        <option value="">Select Finish Time</option>
+                                        <option value="10:00:00">10:00 AM</option>
+                                        <option value="11:00:00">11:00 AM</option>
+                                        <option value="12:00:00">12:00 PM</option>
+                                        <option value="15:00:00">3:00 PM</option>
+                                        <option value="16:00:00">4:00 PM</option>
+                                        <option value="17:00:00">5:00 PM</option>
+                                    </select>
+                                    <span asp-validation-for="FinishTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Reason" class="form-label">Reason for Appointment (Optional)</label>
+                            <textarea asp-for="Reason" class="form-control" rows="4" 
+                                    placeholder="Please describe your symptoms or reason for the appointment"></textarea>
+                            <span asp-validation-for="Reason" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> Please note:
+                            <ul class="mb-0">
+                                <li>Appointments must be scheduled at least 24 hours in advance</li>
+                                <li>Each appointment slot is for 1 hour</li>
+                                <li>Appointment requests are subject to doctor's availability</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary" id="submitButton">
+                                <i class="bi bi-calendar-check"></i> Book Appointment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Set minimum date to tomorrow
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const minDate = tomorrow.toISOString().split('T')[0];
+            document.querySelector('input[type="date"]').min = minDate;
+            
+            // Update finish time options based on start time selection
+            $('#startTime').change(function() {
+                const startTime = $(this).val();
+                const finishSelect = $('#finishTime');
+                finishSelect.val('');
+                
+                finishSelect.find('option').each(function() {
+                    const finishTime = $(this).val();
+                    if (finishTime && finishTime <= startTime) {
+                        $(this).prop('disabled', true);
+                    } else {
+                        $(this).prop('disabled', false);
+                    }
+                });
+            });
+            
+            // Form validation
+            $('#appointmentForm').submit(function(e) {
+                const date = $('#AppointmentDate').val();
+                const startTime = $('#startTime').val();
+                const finishTime = $('#finishTime').val();
+                
+                if (!date || !startTime || !finishTime) {
+                    e.preventDefault();
+                    alert('Please fill in all required fields.');
+                    return false;
+                }
+                
+                // Check if selected date is at least tomorrow
+                const selectedDate = new Date(date);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const minimumDate = new Date(today);
+                minimumDate.setDate(minimumDate.getDate() + 1);
+                
+                if (selectedDate < minimumDate) {
+                    e.preventDefault();
+                    alert('Please select a date at least 24 hours in advance.');
+                    return false;
+                }
+                
+                // Check if finish time is after start time
+                if (startTime >= finishTime) {
+                    e.preventDefault();
+                    alert('Finish time must be after start time.');
+                    return false;
+                }
+                
+                // Disable submit button to prevent double submission
+                $('#submitButton').prop('disabled', true);
+                return true;
+            });
+        });
+    </script>
+} 

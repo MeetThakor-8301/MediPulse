@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Privacy Policy";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <h1 class="display-4 mb-4">@ViewData["Title"]</h1>
+            
+            <div class="card">
+                <div class="card-body">
+                    <h2>Information Collection and Use</h2>
+                    <p>
+                        MediPulse collects and processes personal information necessary for providing healthcare services. 
+                        This includes but is not limited to:
+                    </p>
+                    <ul>
+                        <li>Personal identification information</li>
+                        <li>Medical history and records</li>
+                        <li>Appointment details</li>
+                        <li>Communication records</li>
+                    </ul>
+
+                    <h2 class="mt-4">Data Protection</h2>
+                    <p>
+                        We implement appropriate security measures to protect your personal information. 
+                        Your data is encrypted and stored securely in compliance with healthcare data protection regulations.
+                    </p>
+
+                    <h2 class="mt-4">Information Sharing</h2>
+                    <p>
+                        Your information is shared only with healthcare providers directly involved in your care 
+                        and as required by law. We do not sell or share your data with third parties for marketing purposes.
+                    </p>
+
+                    <h2 class="mt-4">Your Rights</h2>
+                    <p>
+                        You have the right to:
+                    </p>
+                    <ul>
+                        <li>Access your personal information</li>
+                        <li>Request corrections to your data</li>
+                        <li>Request deletion of your data</li>
+                        <li>Withdraw consent for data processing</li>
+                    </ul>
+
+                    <h2 class="mt-4">Contact Us</h2>
+                    <p>
+                        If you have any questions about this Privacy Policy, please contact us at:
+                        <br />
+                        Email: privacy@medipulse.com
+                        <br />
+                        Phone: 1-800-MEDIPULSE
+                    </p>
+
+                    <div class="mt-4">
+                        <small class="text-muted">Last updated: @DateTime.Now.ToString("MMMM dd, yyyy")</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

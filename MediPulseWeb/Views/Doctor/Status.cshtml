@@ -1,0 +1,81 @@
+@model MediPulseWeb.Models.DTOs.DoctorStatusResponse
+@{
+    ViewData["Title"] = "Doctor Status";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Doctor Status</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5>Profile Information</h5>
+                            <p><strong>Name:</strong> @Model.FullName</p>
+                            <p><strong>Email:</strong> @Model.Email</p>
+                            <p><strong>Specialty:</strong> @Model.Speciality</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Status Information</h5>
+                            <p>
+                                <strong>Approval Status:</strong>
+                                @if (Model.IsApproved)
+                                {
+                                    <span class="badge bg-success">Approved</span>
+                                }
+                                else if (Model.IsRejected)
+                                {
+                                    <span class="badge bg-danger">Rejected</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning">Pending</span>
+                                }
+                            </p>
+                            <p><strong>Registration Date:</strong> @Model.CreatedAt.ToString("MMM dd, yyyy")</p>
+                        </div>
+                    </div>
+
+                    @if (!Model.IsApproved)
+                    {
+                        <div class="alert alert-warning">
+                            <h5><i class="bi bi-exclamation-triangle"></i> Your account is not yet approved</h5>
+                            <p>
+                                Your account is currently under review by our administrators. 
+                                This process typically takes 1-2 business days. You will be notified via email once your account is approved.
+                            </p>
+                            @if (Model.IsRejected)
+                            {
+                                <div class="alert alert-danger mt-3">
+                                    <h6>Rejection Reason:</h6>
+                                    <p>@Model.RejectionReason</p>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-success">
+                            <h5><i class="bi bi-check-circle"></i> Your account is approved</h5>
+                            <p>
+                                You can now receive appointments from patients. Make sure to keep your availability updated.
+                            </p>
+                        </div>
+                    }
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="@Url.Action("Profile", "Doctor")" class="btn btn-outline-primary">
+                            <i class="bi bi-person"></i> View Profile
+                        </a>
+                        <a href="@Url.Action("Appointments", "Doctor")" class="btn btn-primary">
+                            <i class="bi bi-calendar-check"></i> View Appointments
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

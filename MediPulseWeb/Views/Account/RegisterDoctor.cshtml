@@ -1,0 +1,67 @@
+@model MediPulseWeb.Models.DTOs.DoctorRegisterRequest
+
+@{
+    ViewData["Title"] = "Register as Doctor";
+    Layout = "_AuthLayout";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h3 class="mb-0">Doctor Registration</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="RegisterDoctor" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="form-floating mb-3">
+                            <input asp-for="FullName" class="form-control" placeholder="Full Name" />
+                            <label asp-for="FullName">Full Name</label>
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-floating mb-3">
+                            <input asp-for="Email" class="form-control" placeholder="name@example.com" />
+                            <label asp-for="Email">Email address</label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-floating mb-3">
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
+                            <label asp-for="Password">Password</label>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-floating mb-3">
+                            <input asp-for="Speciality" class="form-control" placeholder="Speciality" />
+                            <label asp-for="Speciality">Speciality</label>
+                            <span asp-validation-for="Speciality" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Certificate" class="form-label">Medical Certificate</label>
+                            <input asp-for="Certificate" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" />
+                            <span asp-validation-for="Certificate" class="text-danger"></span>
+                            <div class="form-text">Please upload your medical certificate (PDF, JPG, or PNG)</div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center py-3">
+                    <div class="small">
+                        Already have an account? <a asp-action="Login" class="text-decoration-none">Sign In</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 
