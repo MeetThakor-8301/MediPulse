@@ -10,13 +10,39 @@
 /* Global Styles */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: var(--text-dark);
     line-height: 1.6;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     margin: 0;
+    background-color: #121212 !important;
+    color: #fff !important;
 }
+
+.navbar-brand,
+.brand {
+    font-size: 1.8rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    color: #0077b6;
+    text-decoration: none;
+}
+
+    .navbar-brand i {
+        background: linear-gradient(45deg, #ff4d6d, #ff6b81);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-right: 8px;
+        font-size: 1.8rem;
+    }
+
+    .navbar-brand strong {
+        background: linear-gradient(45deg, #0077b6, #94ecd3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
 
 main {
     flex: 1 0 auto;
@@ -24,7 +50,6 @@ main {
 
 /* Navbar Styling */
 .navbar {
-    background: var(--primary-gradient) !important;
     padding: 1rem 0;
     box-shadow: var(--shadow);
 }

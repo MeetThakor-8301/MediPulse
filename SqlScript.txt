@@ -55,19 +55,3 @@ CREATE TABLE Payments (
     FOREIGN KEY (AppointmentId) REFERENCES Appointments(Id) ON DELETE CASCADE
 );
 
-
-CREATE TABLE AuditLogs (
-    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    UserId UNIQUEIDENTIFIER NOT NULL,
-    Action NVARCHAR(255) NOT NULL,
-    ActionDate DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE
-);
-
-
-
-
-
-
-Insert into Users(FullName,Email,PasswordHash,Role)
-Values('Admin User','admin@gmail.com','$2a$11$jwotyUk0P4zJEUF7IwEuK.36sc7xVBuxqNsgeM.scbWZdBQxXl1NS','SuperAdmin')
